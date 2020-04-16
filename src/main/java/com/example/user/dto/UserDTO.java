@@ -3,9 +3,14 @@
  */
 package com.example.user.dto;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import com.example.role.dto.RoleDTO;
 import com.example.user.validation.constraint.EmailAlreadyUsed;
 import com.example.user.validation.group.PrimaryValidationGroup;
 
@@ -29,6 +34,20 @@ public class UserDTO {
 	@NotBlank(message = "{phoneNumber.required}")
 	private String phoneNumber;
 
+	@NotNull
+	private Set<RoleDTO> roleDTOs;
+
+	@NotNull
+	private List<UserInterestDTO> userInterestDTOs;
+
+	public Set<RoleDTO> getRoleDTOs() {
+		return roleDTOs;
+	}
+
+	public void setRoleDTOs(Set<RoleDTO> roleDTOs) {
+		this.roleDTOs = roleDTOs;
+	}
+
 	/**
 	 * @return the id
 	 */
@@ -37,8 +56,7 @@ public class UserDTO {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -52,8 +70,7 @@ public class UserDTO {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -67,8 +84,7 @@ public class UserDTO {
 	}
 
 	/**
-	 * @param email
-	 *            the email to set
+	 * @param email the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -82,11 +98,18 @@ public class UserDTO {
 	}
 
 	/**
-	 * @param phoneNumber
-	 *            the phoneNumber to set
+	 * @param phoneNumber the phoneNumber to set
 	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public List<UserInterestDTO> getUserInterestDTOs() {
+		return userInterestDTOs;
+	}
+
+	public void setUserInterestDTOs(List<UserInterestDTO> userInterestDTOs) {
+		this.userInterestDTOs = userInterestDTOs;
 	}
 
 }

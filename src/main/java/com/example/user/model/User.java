@@ -3,11 +3,25 @@
  */
 package com.example.user.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import com.example.role.model.Role;
 
 /**
  * @author Salman.Khandu
@@ -18,23 +32,55 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
 	private Long id;
 	private String name;
 	private String password;
 	private String email;
 	private String phoneNumber;
 
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "user_role_mapping", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "role_id") })
+	private Set<Role> roles = new HashSet<>();
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "user_interest_mapping", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "interests_id", referencedColumnName = "id") })
+	private List<UserInterest> interests = new ArrayList<>();
+
+	public void addInterest(UserInterest interest) {
+		interests.add(interest);
+		interest.getUsers().add(this);
+	}
+
+	public void addRole(Role role) {
+		roles.add(role);
+		role.getUsers().add(this);
+	}
+
 	public User() {
 
 	}
 
-	public User(Long id, String name, String email, String phoneNumber) {
+	public List<UserInterest> getInterests() {
+		return interests;
+	}
+
+	public void setInterests(List<UserInterest> interests) {
+		this.interests = interests;
+	}
+
+	public User(Long id, String name, String email, String phoneNumber, Set<Role> roles, List<UserInterest> interests) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
+		roles.stream().forEach(this::addRole);
+		interests.stream().forEach(this::addInterest);
 	}
 
 	/**
@@ -45,8 +91,7 @@ public class User {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -60,8 +105,7 @@ public class User {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -75,8 +119,7 @@ public class User {
 	}
 
 	/**
-	 * @param email
-	 *            the email to set
+	 * @param email the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -90,8 +133,7 @@ public class User {
 	}
 
 	/**
-	 * @param phoneNumber
-	 *            the phoneNumber to set
+	 * @param phoneNumber the phoneNumber to set
 	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
@@ -110,7 +152,13 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 
 }
