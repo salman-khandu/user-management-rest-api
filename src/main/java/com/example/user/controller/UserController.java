@@ -58,7 +58,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/summary/{id}")
-	public ResponseEntity<?> userSummary(@PathVariable Long id) throws UserNotFoundException {
+	public ResponseEntity<?> userSummary(@PathVariable Long id) throws UserNotFoundException, MalformedObjectNameException {
 		NameOnly user = this.userService.getProjectionUser(id);
 		System.out.println(user.getName());
 		return new ResponseEntity<>(user, HttpStatus.OK);

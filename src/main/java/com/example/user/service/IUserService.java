@@ -22,7 +22,7 @@ public interface IUserService {
 	 * Create New User.
 	 * 
 	 * @param userDTO
-	 * @throws MalformedObjectNameException 
+	 * @throws MalformedObjectNameException
 	 */
 	public void create(UserDTO userDTO) throws MalformedObjectNameException;
 
@@ -56,7 +56,7 @@ public interface IUserService {
 
 	public DataGridResponseDTO<?> list(DataGridSearchCriteria<UserSearchCriteriaDTO> userSearchCriteriaDTO);
 
-	public NameOnly getProjectionUser(Long id);
+	public NameOnly getProjectionUser(Long id) throws MalformedObjectNameException;
 
 	public void deleteCollectionTest(Long id);
 }

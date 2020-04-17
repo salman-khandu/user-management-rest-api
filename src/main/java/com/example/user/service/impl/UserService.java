@@ -159,8 +159,8 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	//@Transactional
-	public NameOnly getProjectionUser(Long id) {
+	@Transactional
+	public NameOnly getProjectionUser(Long id) throws MalformedObjectNameException {
 		User user = this.userRepository.findById(id).get();
 //		org.hibernate.engine.spi.PersistenceContext persistenceContext = getHibernatePersistenceContext();
 //		EntityEntry entityEntry = persistenceContext.getEntry(user);
@@ -169,8 +169,15 @@ public class UserService implements IUserService {
 
 		user.setEmail("test11");
 		this.userRepository.findSimpleUserByName("salman").get();
+		
+		System.out.println("Test");
+		HikariPoolMXBeanUtils.logHikariPoolStates();
 		this.userRepository.countTotalUserByName("salman").getTotalUser();
+		System.out.println("Test");
+		HikariPoolMXBeanUtils.logHikariPoolStates();
 		this.userRepository.findByName("salman", NameAndEmailOnly.class);
+		System.out.println("Test");
+		HikariPoolMXBeanUtils.logHikariPoolStates();
 		return this.userRepository.findByName("salman", NameOnly.class);
 	}
 
