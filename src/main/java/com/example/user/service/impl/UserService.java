@@ -2,6 +2,7 @@ package com.example.user.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.management.MalformedObjectNameException;
@@ -15,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -25,8 +27,9 @@ import com.example.base.HikariPoolMXBeanUtils;
 import com.example.base.dto.DataGridResponseDTO;
 import com.example.base.dto.DataGridSearchCriteria;
 import com.example.base.dto.PageInfo;
+import com.example.base.security.dto.SignUpRequest;
 import com.example.role.model.Role;
-import com.example.user.component.UserBuilder;
+import com.example.role.repository.RoleRepository;
 import com.example.user.dto.UserDTO;
 import com.example.user.dto.UserResponseDTO;
 import com.example.user.dto.UserSearchCriteriaDTO;
@@ -51,12 +54,18 @@ public class UserService implements IUserService {
 
 	private UserRepository userRepository;
 	private ApplicationContext applicationContext;
+	private PasswordEncoder passwordEncoder;
+	private RoleRepository roleRepository;
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public UserService(UserRepository userRepository, ApplicationContext applicationContext) {
+	public UserService(UserRepository userRepository, ApplicationContext applicationContext,
+			PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
 		this.userRepository = userRepository;
 		this.applicationContext = applicationContext;
+		this.passwordEncoder = passwordEncoder;
+		this.roleRepository = roleRepository;
 	}
 
 	/**
@@ -73,10 +82,11 @@ public class UserService implements IUserService {
 	}
 
 	private User map(UserDTO userDTO) {
-		UserBuilder userBuilder = this.applicationContext.getBean(UserBuilder.class);
-		return userBuilder.withName(userDTO.getName()).withEmail(userDTO.getEmail())
-				.withPhoneNumber(userDTO.getPhoneNumber()).role(userDTO.getRoleDTOs())
-				.interests(userDTO.getUserInterestDTOs()).build();
+		return null;
+//		UserBuilder userBuilder = this.applicationContext.getBean(UserBuilder.class);
+//		return userBuilder.withName(userDTO.getName()).withEmail(userDTO.getEmail())
+//				.withPhoneNumber(userDTO.getPhoneNumber()).role(userDTO.getRoleDTOs())
+//				.interests(userDTO.getUserInterestDTOs()).build();
 	}
 
 	/**
@@ -168,8 +178,9 @@ public class UserService implements IUserService {
 //				"Loaded State exist in cases of default transaction mode (read/write mode)");
 
 		user.setEmail("test11");
+		// this.userRepository.findByUserNameNative("salman");
 		this.userRepository.findSimpleUserByName("salman").get();
-		
+
 		System.out.println("Test");
 		HikariPoolMXBeanUtils.logHikariPoolStates();
 		this.userRepository.countTotalUserByName("salman").getTotalUser();
@@ -196,5 +207,19 @@ public class UserService implements IUserService {
 
 		System.out.println("Set Role Removing");
 		user.getRoles().remove(user.getRoles().iterator().next());
+	}
+
+	@Override
+	@Transactional
+	public void signUp(SignUpRequest signUpRequest) {
+		User user = new User();
+		user.setEmail(signUpRequest.getEmail());
+		user.setPassword(this.passwordEncoder.encode(signUpRequest.getPassword()));
+		Optional<Set<Role>> roles = this.roleRepository.findByNameIn(signUpRequest.getRoles());
+		if (roles.isPresent()) {
+			roles.get().forEach(user::addRole);
+			user.setRoles(roles.get());
+		}
+		this.userRepository.save(user);
 	}
 }

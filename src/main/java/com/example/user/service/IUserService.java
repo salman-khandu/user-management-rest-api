@@ -1,9 +1,11 @@
 package com.example.user.service;
 
 import javax.management.MalformedObjectNameException;
+import javax.validation.Valid;
 
 import com.example.base.dto.DataGridResponseDTO;
 import com.example.base.dto.DataGridSearchCriteria;
+import com.example.base.security.dto.SignUpRequest;
 import com.example.user.dto.UserDTO;
 import com.example.user.dto.UserResponseDTO;
 import com.example.user.dto.UserSearchCriteriaDTO;
@@ -59,4 +61,7 @@ public interface IUserService {
 	public NameOnly getProjectionUser(Long id) throws MalformedObjectNameException;
 
 	public void deleteCollectionTest(Long id);
+	
+	
+	public void signUp(SignUpRequest signUpRequest);
 }

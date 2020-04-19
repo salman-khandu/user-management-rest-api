@@ -70,5 +70,10 @@ public class Role implements Serializable {
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
+	
+	public void addUser(User user) {
+		this.getUsers().add(user);	
+		user.getRoles().add(this);
+	}
 
 }

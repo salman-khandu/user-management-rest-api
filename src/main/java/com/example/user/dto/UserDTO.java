@@ -4,7 +4,6 @@
 package com.example.user.dto;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -24,27 +23,33 @@ public class UserDTO {
 
 	private Long id;
 
-	@NotBlank(message = "{name.required}")
+//	@NotBlank(message = "{name.required}")
 	private String name;
 
 	@NotBlank(message = "{email.required}")
 	@Email(message = "{email.invalid}")
 	private String email;
 
-	@NotBlank(message = "{phoneNumber.required}")
+//	@NotBlank(message = "{phoneNumber.required}")
 	private String phoneNumber;
 
-	@NotNull
-	private Set<RoleDTO> roleDTOs;
+	@NotBlank(message = "{password.required}")
+	private String password;
 
 	@NotNull
+	private List<@NotBlank String> roles;
+
+//	@NotNull
+	private List<RoleDTO> roleDTOs;
+
+//	@NotNull
 	private List<UserInterestDTO> userInterestDTOs;
 
-	public Set<RoleDTO> getRoleDTOs() {
+	public List<RoleDTO> getRoleDTOs() {
 		return roleDTOs;
 	}
 
-	public void setRoleDTOs(Set<RoleDTO> roleDTOs) {
+	public void setRoleDTOs(List<RoleDTO> roleDTOs) {
 		this.roleDTOs = roleDTOs;
 	}
 
@@ -111,5 +116,23 @@ public class UserDTO {
 	public void setUserInterestDTOs(List<UserInterestDTO> userInterestDTOs) {
 		this.userInterestDTOs = userInterestDTOs;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+	
+	
 
 }

@@ -20,11 +20,16 @@ import com.example.user.projection.SimpleUserClass;
  */
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
+	Optional<User> findByEmail(String email);
+
 	Optional<User> findOneByEmailIgnoreCaseAndIdNot(String userName, Long id);
 
 	Optional<User> findOneByEmailIgnoreCase(String userName);
 
 	Optional<SimpleUserClass> findSimpleUserByName(String usename);
+
+	@Query(value = "SELECT u.name FROM User AS u where u.name = ?1")
+	String findByUserName(String usename);
 
 	<T> T findByName(String usename, Class<T> type);
 
