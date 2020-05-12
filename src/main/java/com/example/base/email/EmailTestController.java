@@ -3,6 +3,8 @@ package com.example.base.email;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ public class EmailTestController {
 		this.mailClient = mailClient;
 	}
 
-	@PostMapping("/send")
+	@PostConstruct
 	public void emaiSend() {
 		String[] to = { "user1@email.com" };
 		EmailRequest emailRequest = EmailRequest.of(this.fromEmail, to, null, null, "Email Greetings");

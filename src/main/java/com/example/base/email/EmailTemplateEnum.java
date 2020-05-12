@@ -2,7 +2,7 @@ package com.example.base.email;
 
 public enum EmailTemplateEnum {
 
-	GREETING("emailTempalteTQG.html");
+	GREETING("email");
 
 	EmailTemplateEnum(String name) {
 		this.name = name;
