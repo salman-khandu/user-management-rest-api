@@ -35,7 +35,6 @@ import com.example.user.dto.UserResponseDTO;
 import com.example.user.dto.UserSearchCriteriaDTO;
 import com.example.user.exception.UserNotFoundException;
 import com.example.user.model.User;
-import com.example.user.model.UserInterest;
 import com.example.user.projection.NameAndEmailOnly;
 import com.example.user.projection.NameOnly;
 import com.example.user.repository.UserRepository;
@@ -124,9 +123,7 @@ public class UserService implements IUserService {
 			Optional<User> user = this.userRepository.findById(id);
 			User user1 = user.get();
 			Role role1 = user1.getRoles().iterator().next();
-			UserInterest userInterest = user1.getInterests().get(0);
 			user1.getRoles().remove(role1);
-			user1.getInterests().remove(userInterest);
 			this.userRepository.save(user.get());
 		} catch (EmptyResultDataAccessException exception) {
 			throw new UserNotFoundException("User Not found");
@@ -201,10 +198,6 @@ public class UserService implements IUserService {
 	@Transactional
 	public void deleteCollectionTest(Long id) {
 		User user = this.userRepository.findById(id).get();
-		// List Removing
-		System.out.println("List User Interest Removing");
-		user.getInterests().remove(0);
-
 		System.out.println("Set Role Removing");
 		user.getRoles().remove(user.getRoles().iterator().next());
 	}

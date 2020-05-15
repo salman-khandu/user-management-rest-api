@@ -10,14 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.example.user.model.User;
 
-@Entity(name = "Role")
-@Table(name = "role")
+@Entity(name = "T_ROLE")
 public class Role implements Serializable {
 
 	/**
@@ -36,7 +34,7 @@ public class Role implements Serializable {
 
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> users = new HashSet<>();
-	
+
 	public Role() {
 		// TODO Auto-generated constructor stub
 	}
@@ -70,9 +68,9 @@ public class Role implements Serializable {
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
-	
+
 	public void addUser(User user) {
-		this.getUsers().add(user);	
+		this.getUsers().add(user);
 		user.getRoles().add(this);
 	}
 

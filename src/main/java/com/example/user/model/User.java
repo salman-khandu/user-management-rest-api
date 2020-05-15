@@ -41,20 +41,10 @@ public class User {
 	private String phoneNumber;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "user_role_mapping", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+	@JoinTable(name = "T_USER_ROLE_MAPPING", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
 	private Set<Role> roles = new HashSet<>();
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "user_interest_mapping", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "interests_id", referencedColumnName = "id") })
-	private List<UserInterest> interests = new ArrayList<>();
-
-	public void addInterest(UserInterest interest) {
-		interests.add(interest);
-		interest.getUsers().add(this);
-	}
 
 	public void addRole(Role role) {
 		roles.add(role);
@@ -65,22 +55,15 @@ public class User {
 
 	}
 
-	public List<UserInterest> getInterests() {
-		return interests;
-	}
+	
 
-	public void setInterests(List<UserInterest> interests) {
-		this.interests = interests;
-	}
-
-	public User(Long id, String name, String email, String phoneNumber, Set<Role> roles, List<UserInterest> interests) {
+	public User(Long id, String name, String email, String phoneNumber, Set<Role> roles) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		roles.stream().forEach(this::addRole);
-		interests.stream().forEach(this::addInterest);
 	}
 
 	/**
